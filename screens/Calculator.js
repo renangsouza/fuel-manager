@@ -1,4 +1,4 @@
-import React, {userState} from 'react';
+import React from 'react';
 import {Alert, StyleSheet, View} from 'react-native'
 import { Appbar, Button, Text, TextInput } from 'react-native-paper';
 

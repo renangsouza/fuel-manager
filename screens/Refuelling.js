@@ -1,7 +1,9 @@
-import React from 'react'
-import { StyleSheet, View } from 'react-native'
+import React, { useState } from 'react'
+import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import { Appbar, Button, RadioButton, Text, TextInput } from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import moment from "moment"
 
 import Container from '../components/Container'
 import Body from '../components/Body'
@@ -12,11 +14,15 @@ const Refuelling = () => {
 
   const navigation = useNavigation();
 
+  // datetimepicker
+  const [date, setDate] = useState(new Date())
+  const [show, setShow] = useState(false);
+
   // Variáveis
   const [fuel, setFuel] = React.useState('first')
   const [price, setPrice] = React.useState(null)
   const [odometer, setOdometer] = React.useState(null)
-  const [date, setDate] = React.useState(null)
+  const [day, setDay] = React.useState(null)
   const [volume, setVolume] = React.useState(null)
 
   // Funções
@@ -39,15 +45,15 @@ const Refuelling = () => {
               color= 'red'
               status={ fuel === 'gas' ? 'checked' : 'unchecked' }
               onPress={() => setFuel('gas')}
-            /> <Text> Gas </Text>
+            /><Text>Gas</Text>
           </View>
           <View style={styles.radioContainerItem}>
             <RadioButton
-              value='ethanol'
+              value= 'gas'
               color= 'green'
               status={ fuel === 'ethanol' ? 'checked' : 'unchecked' }
               onPress={() => setFuel('ethanol')}
-            /> <Text> Ethanol </Text>
+            /><Text>Ethanol</Text>          
           </View>
         </View>
         <Input
@@ -68,12 +74,29 @@ const Refuelling = () => {
           onChangeText={text => setOdometer(text)}
           right={<TextInput.Icon name="road" />}          
         />
+        {show && (
+          <DateTimePicker
+            testID="dateTimePicker"
+            value={date}
+            mode={"date"}
+            display="default"
+            is24Hour={true}
+            onTouchCancel = {() => setShow(false)}
+            onChange={(event, date) => {
+              setShow(false)
+              setDay(moment(date).format("YYYY/MM/DD"))
+            }}
+          />
+        )}
+
+        <TouchableOpacity onPress={() => setShow(true)}>
         <Input
-          label='Date'
-          value={date}
-          onChangeText={text => setDate(text)}
+          label='Year/Month/Day'
+          value={day}
           right={<TextInput.Icon name="calendar-month" />}
+          editable={false}
         />
+        </TouchableOpacity>
         <Button
           mode="contained"
           onPress={handleSubmit}
