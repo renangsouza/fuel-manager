@@ -1,0 +1,23 @@
+import React from 'react';
+import {StyleSheet} from 'react-native';
+import {TextInput} from 'react-native-paper';
+
+const Input = (props) => {
+  
+  return (
+    <TextInput 
+      style={styles.input} 
+      keyboardType='decimal-pad'
+      {...props} // Interessante: propiedades são definidas na implementação.
+    />
+  );
+
+}
+
+const styles = StyleSheet.create({
+  input:{
+    margin: 8
+  }
+});
+
+export default Input;
