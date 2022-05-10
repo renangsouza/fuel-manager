@@ -6,9 +6,9 @@ const Input = (props) => {
   
   return (
     <TextInput 
-      style={styles.input} 
+      style={styles.input}
       keyboardType='decimal-pad'
-      {...props} // Interessante: propiedades são definidas na implementação.
+      {...props}
     />
   );
 

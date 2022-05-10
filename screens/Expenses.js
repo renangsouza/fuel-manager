@@ -10,31 +10,19 @@ import Header from '../components/Header';
 const DATA = [
   {
     id: 1,
-    tipo: 0,
+    type: 0,
     date: '25/04/2022',
-    value: 67.18,
-    odometer: '????????'
-  },
-  {
-    id: 2,
-    tipo: 0,
-    date: '13/03/2022',
-    value: 57.21,
-    odometer: '????????'
-  },
-  {
-    id: 3,
-    tipo: 0,
-    date: '11/01/2022',
-    value: 53.24,
-    odometer: '????????'
+    price: 67.18,
+    odometer: '3760',
+    volume: 9
   },
   {
     id: 4,
-    tipo: 1,
+    type: 1,
     date: '01/01/2022',
-    value: 22.24,
-    odometer: '????????'
+    price: 22.24,
+    odometer: '????????',
+    volume: 9
   }
 ]
 
@@ -50,10 +38,11 @@ const Expenses = () => {
   
   const renderItem = ({ item }) => (
     <List.Item
-      title={'R$ ' + item.value.toFixed(2)}
-      description={item.odometer + ' km'}
-      left={props => <List.Icon {...props} color={(item.tipo == 0 ? 'red' : 'green')} icon='gas-station' />}
+      title={'R$ ' + item.price.toFixed(2)}
+      description={item.volume + " L" + "\n" + item.odometer + ' km'}
+      left={props => <List.Icon {...props} color={(item.type == 0 ? 'red' : 'green')} icon='gas-station' />}
       right={props => <Text style={{alignSelf: 'center'}}> {item.date} </Text>}
+      onPress={() => navigation.navigate("Refuelling", {item})}
     />
   );
 

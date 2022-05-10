@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import { Appbar, Button, RadioButton, Text, TextInput } from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
@@ -10,9 +10,11 @@ import Body from '../components/Body'
 import Header from '../components/Header'
 import Input from '../components/Input'
 
-const Refuelling = () => {
+const Refuelling = ({ route }) => {
 
+  // navigation stuff
   const navigation = useNavigation();
+  const {item} = route.params ? route.params : {}
 
   // datetimepicker
   const [date, setDate] = useState(new Date())
@@ -22,20 +24,30 @@ const Refuelling = () => {
   const [fuel, setFuel] = React.useState('first')
   const [price, setPrice] = React.useState(null)
   const [odometer, setOdometer] = React.useState(null)
-  const [day, setDay] = React.useState(null)
+  const [day, setDay] = useState(moment(new Date()).format("YYYY/MM/DD"))
   const [volume, setVolume] = React.useState(null)
 
   // Funções
   const handleSubmit = () => {
     console.log("A implementar.")
   }
+
+  useEffect(() => {
+    if (item) {
+      setFuel(item.type == 0 ? "gas" : "ethanol");
+      setPrice(item.price);
+      setOdometer(item.odometer);
+      setVolume(item.volume);
+      setDay(item.date);
+    }
+  }, [item])
   
   return (
     
     <Container>
     {/*<Header goBack={() => navigation.navigate('Main')} title='Add Refueling Data' /> Funciona */}
     <Header goBack={() => navigation.goBack()} title='Add Refueling Data'>
-      <Appbar.Action icon="plus-circle" onPress={handleSubmit} />
+      <Appbar.Action icon="content-save" onPress={handleSubmit} />
     </Header>
       <Body>
         <View style={styles.radioContainer}>
@@ -98,11 +110,19 @@ const Refuelling = () => {
         />
         </TouchableOpacity>
         <Button
+          style={styles.button}
           mode="contained"
           onPress={handleSubmit}
         >
-          Submit
+          Save
         </Button>
+        {item && <Button
+          style={styles.button}
+          mode="contained"
+          onPress={handleSubmit}
+        >
+          Delete
+        </Button>}
       </Body>
     </Container>
 
@@ -118,6 +138,10 @@ const styles = StyleSheet.create({
   radioContainerItem:{
     flexDirection: 'row',
     alignItems: 'center',
+  },
+  button:{
+    marginTop: 8,
+    marginHorizontal: 8
   }
 })
 
