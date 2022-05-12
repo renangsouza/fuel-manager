@@ -23,7 +23,7 @@ const Expenses = () => {
 
    useEffect(() => {
     retrieveExpense().then((retrieved_data)=>{
-      console.log(retrieved_data);
+      //console.log(retrieved_data);
       setExpense(retrieved_data)
     });
 

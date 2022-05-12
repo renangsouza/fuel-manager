@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { StyleSheet, TouchableOpacity, View } from 'react-native'
+import { Alert, StyleSheet, TouchableOpacity, View } from 'react-native'
 import { Appbar, Button, RadioButton, Text, TextInput } from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -9,28 +9,49 @@ import Container from '../components/Container'
 import Body from '../components/Body'
 import Header from '../components/Header'
 import Input from '../components/Input'
-import { insertExpense } from "../services/ExpensesDBServices"
+import { deleteExpense, insertExpense, updateExpense } from "../services/ExpensesDBServices"
 
 const Refuelling = ({ route }) => {
 
   // navigation stuff
   const navigation = useNavigation();
-  const {item} = route.params ? route.params : {}
+  const { item } = route.params ? route.params : {}
 
   // datetimepicker
   const [date, setDate] = useState(new Date())
   const [show, setShow] = useState(false);
 
   // Variáveis
-  const [fuel, setFuel] = React.useState('first')
-  const [price, setPrice] = React.useState(null)
-  const [odometer, setOdometer] = React.useState(null)
+  const [fuel, setFuel] = useState("gas")
+  const [price, setPrice] = useState(null)
+  const [odometer, setOdometer] = useState(null)
   const [day, setDay] = useState(moment(new Date()).format("YYYY/MM/DD"))
-  const [volume, setVolume] = React.useState(null)
+  const [volume, setVolume] = useState(null)
+  
+  useEffect(() => {
+    if (item) {
+      setFuel(item.fuel == 0 ? "gas" : "ethanol")
+      setDay(item.date)
+      setPrice(item.value.toFixed(2))
+      setVolume(item.volume.toFixed(2))
+      setOdometer(item.odometer.toFixed(0))   
+    }
+  }, [item])
 
   // Funções
   const handleSubmit = () => {
-    if (!item) {
+    if (item) {
+        updateExpense(
+          {
+            fuel: fuel == "gas" ? 0 : 1,
+            date: day,
+            value: price,
+            volume: volume,
+            odometer: odometer,
+            id: item.id
+          }
+        ).then()
+    } else {
         insertExpense(
           {
             fuel: fuel == "gas" ? 0 : 1,
@@ -38,24 +59,19 @@ const Refuelling = ({ route }) => {
             value: price,
             volume: volume,
             odometer: odometer
-          }
+          } 
         ).then()
     }
     navigation.goBack()
   }
 
-  useEffect(() => {
-    if (item) {
-      setFuel(item.fuel == 0 ? "gas" : "ethanol");
-      setPrice(item.price);
-      setOdometer(item.odometer);
-      setVolume(item.volume);
-      setDay(item.date);
-    }
-  }, [item])
-  
+  const handleDelete = () => {
+    deleteExpense(item.id).then()
+    navigation.goBack()
+  }
+
   return (
-    
+
     <Container>
     {/*<Header goBack={() => navigation.navigate('Main')} title='Add Refueling Data' /> Funciona */}
     <Header goBack={() => navigation.goBack()} title='Add Refueling Data'>
@@ -83,19 +99,19 @@ const Refuelling = ({ route }) => {
         <Input
           label='Price'
           value={price}
-          onChangeText={text => setPrice(text)}
+          onChangeText={(text) => setPrice(text)}
           right={<TextInput.Icon name="currency-brl" />}
         />
         <Input
           label='Volume (L)'
           value={volume}
-          onChangeText={text => setVolume(text)}
+          onChangeText={(text) => setVolume(text)}
           right={<TextInput.Icon name="gas-station" />}
         />
         <Input
           label='Odometer (KM)'
           value={odometer}
-          onChangeText={text => setOdometer(text)}
+          onChangeText={(text) => setOdometer(text)}
           right={<TextInput.Icon name="road" />}          
         />
         {show && (
@@ -131,7 +147,7 @@ const Refuelling = ({ route }) => {
         {item && <Button
           style={styles.button}
           mode="contained"
-          onPress={handleSubmit}
+          onPress={handleDelete}
         >
           Delete
         </Button>}
