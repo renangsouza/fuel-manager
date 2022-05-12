@@ -9,6 +9,7 @@ import Container from '../components/Container'
 import Body from '../components/Body'
 import Header from '../components/Header'
 import Input from '../components/Input'
+import { insertExpense } from "../services/ExpensesDBServices"
 
 const Refuelling = ({ route }) => {
 
@@ -29,12 +30,23 @@ const Refuelling = ({ route }) => {
 
   // Funções
   const handleSubmit = () => {
-    console.log("A implementar.")
+    if (!item) {
+        insertExpense(
+          {
+            fuel: fuel == "gas" ? 0 : 1,
+            date: day,
+            value: price,
+            volume: volume,
+            odometer: odometer
+          }
+        ).then()
+    }
+    navigation.goBack()
   }
 
   useEffect(() => {
     if (item) {
-      setFuel(item.type == 0 ? "gas" : "ethanol");
+      setFuel(item.fuel == 0 ? "gas" : "ethanol");
       setPrice(item.price);
       setOdometer(item.odometer);
       setVolume(item.volume);
