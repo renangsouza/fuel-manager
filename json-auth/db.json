@@ -1,0 +1,21 @@
+{
+  "users": [],
+  "Expenses": [
+    {
+      "id": 1,
+      "fuel": 0,
+      "value": 5.36,
+      "volume": 13,
+      "odometro": 22000,
+      "date": "2022/01/01"
+    },
+    {
+      "id": 2, 
+      "fuel": 0,
+      "value": 7.77,
+      "volume": 13,
+      "odometro": 22100,
+      "date": "2022/02/01"
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+curl -X GET http://192.168.2.223:8080/Expenses
+
+curl -X POST http://localhost:8080/Expenses -H 'Content-Type: application/json' -d '{"id": 3, "fuel": 1, "date": "2022/05/13", "value": 10, "volume": 12, "odometer": 1945}'
+
+curl -X DELETE http://localhost:8080/Expenses/3 -H 'Content-Type: application/json'
+
+curl -X PATCH http://localhost:8080/Expenses/3 -H 'Content-Type: application/json' -d '{"id": 3, "fuel": 0, "date": "2022/12/25", "value": 10, "volume": 12, "odometer": 1945}'
